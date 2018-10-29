@@ -56,26 +56,27 @@ public class Tree<E> {
 			return current;
 		}
 		
-//		else {
-//			Node<E> p;
-//			if((p = getParent(current.leftChild, value)) != null) {
-//				return p;
-//			}
-//			else {
-//				return getParent(current.rightChild, value);
-//			}
-//		}
 		else {
-			if(current.leftChild != null) {
-				return getParent(current.leftChild, value);
-			}
-			else if(current.leftChild == null) {
-				return null;
+			Node<E> p;
+			if((p = getParent(current.leftChild, value)) != null) {
+				return p;
 			}
 			else {
 				return getParent(current.rightChild, value);
 			}
 		}
+//		else {
+//			if(current.leftChild != null) {
+//				return getParent(current.leftChild, value);
+//			}
+//			
+//			else if(current.rightChild != null) {
+//				return getParent(current.rightChild, value);
+//			}
+//			else {
+//				return null;
+//			}
+//		}
 		
 	}
 	
