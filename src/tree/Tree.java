@@ -56,34 +56,32 @@ public class Tree<E> {
 			return current;
 		}
 		
+		else {
+			Node<E> p;
+			if((p = getParent(current.leftChild, value)) != null) {
+				return p;
+			}
+			else {
+				return getParent(current.rightChild, value);
+			}
+		}
+		
+//错误代码：	原因：在查找时得到一个没有得到查找结果就进行了返回		更正：在得到查找结果后需判断是否为空，如果不为空才能返回
 //		else {
-//			Node<E> p;
-//			if((p = getParent(current.leftChild, value)) != null) {
-//				return p;
-//			}
-//			else {
-//				return getParent(current.rightChild, value);
-//			}
+//		if(current.leftChild != null) {
+//			return getParent(current.leftChild, value);
 //		}
+//		
+//		else if(current.rightChild != null) {
+//			return getParent(current.rightChild, value);
+//		}
+//		else {
+//			return null;
+//		}
+//	
 
 		
-//错误代码，原因：在判断左右孩子不为空之后没有查找，
-		else {
-			if(current.leftChild != null) {
-				Node<E> result = getParent(current.leftChild, value);
-				if(result != null) {
-					return result;
-				}
-			}
-			
-			if(current.rightChild != null) {
-				Node<E> result = getParent(current.rightChild, value);
-				if(result != null) {
-					return result;
-				}
-			}
-			return null;
-		}
+
 	}
 	
 	
