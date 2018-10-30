@@ -8,7 +8,6 @@ public class NonRecursiveTree<E> {
 
 	public NonRecursiveTree(String content) {
 		createTree(content);
-		System.out.println("s");
 	}
 
 	public static class Node<E> {
@@ -42,8 +41,10 @@ public class NonRecursiveTree<E> {
 				if (top.popTime == 1) {
 					top.leftChild = current;
 					stack.push((E) top);
-				} else  {
+				} else if (top.popTime == 2) {
 					top.rightChild = current;
+					top.popTime = 0;
+					//stack.push((E) top);   注：当一个元素被取出两次时，它就不能入栈。
 				} 
 				
 				if(current != null) {
@@ -52,14 +53,101 @@ public class NonRecursiveTree<E> {
 			}
 			
 			if(index == 1) {
-				if(index == 1) {
-					root = current;
-					stack.push((E)current);
-				}
-
+				root = current;
+				stack.push((E) current);
 			}
 		}
-		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Node<E> getFirstInPostOrder(){
+		stack.clean();
+		stack.push((E)root);
+		return getNextInPostOrder();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Node<E> getNextInPostOrder(){
+		if(stack.isEmpty()) {
+			throw new IndexOutOfBoundsException();
+		}
+		else {
+			for( ; ; ) {	
+				Node<E> top = (Node<E>)stack.top();  stack.pop();	
+				top.popTime++;
+				if(top.popTime == 3) {
+					top.popTime = 0;
+					return top;
+				}
+				else if(top.popTime == 2) {
+					stack.push((E)top);
+					if(top.rightChild != null) {
+						stack.push((E)top.rightChild);
+					}
+				}
+				else {
+					stack.push((E)top);
+					if(top.leftChild != null) {
+						stack.push((E)top.leftChild);
+					}
+				}
+			}
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Node<E> getFirstInOrder(){
+		stack.clean();
+		stack.push((E)root);
+		return getNextInOrder();
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public Node<E> getNextInOrder(){
+		if(stack.isEmpty()) {
+			throw new IndexOutOfBoundsException();
+		}
+		else {
+			for( ; ; ) {
+				Node<E> top = (Node<E>) stack.top();  stack.pop();
+				top.popTime++;
+				if(top.popTime == 1 ) {
+					stack.push((E) top);
+					if(top.leftChild != null)	stack.push((E)top.leftChild);
+				}
+				else {
+					if(top.rightChild != null)  stack.push((E)top.rightChild);
+					top.popTime = 0;
+					return top;
+				}
+			}
+		}
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public Node<E> getFirstInPreOrder(){
+		stack.clean();
+		stack.push((E)root);
+		return getNextInPreOrder();
+	}
+	@SuppressWarnings("unchecked")
+	public Node<E> getNextInPreOrder(){
+		if(stack.isEmpty()) {
+			throw new IndexOutOfBoundsException();
+		}
+		else {
+			Node<E> top = (Node<E>) stack.top();
+			stack.pop();
+			if (top.rightChild != null) stack.push((E) top.rightChild);
+			if(top.leftChild != null) stack.push((E) top.leftChild);
+			return top;
+		}
+	}
+	
+	public Stack<E> getStack() {
+		return stack;
 	}
 	
 }
